@@ -1,28 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="challenge">
+      <Header/>
+      <Content/>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import Header from "./components/template/Header.vue"
+import Content from "./components/template/Content.vue"
+
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: { Header, Content }
 }
 </script>
 
 <style>
+
+/* * {
+  font-family: '';
+} */
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background-color: #E5E5E5;
 }
+
+body {
+  margin:0;
+}
+
+.challenge {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 120px 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "header"
+    "content"
+}
+
 </style>
