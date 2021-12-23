@@ -1,22 +1,23 @@
 <template>
     <div>
-        <!-- <el-input placeholder="Searching..." v-model="search" size="large" style="margin-bottom: 30px;">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-        </el-input>
-        <el-table border stripe empty-text="Sem resultados">
-            <el-table-column prop="name" label="Name" sortable></el-table-column>
-            <el-table-column prop="gender" label="Gender"></el-table-column>
-            <el-table-column prop="birth" label="Birth"></el-table-column>
-            <el-table-column label="Actions">
-                <template slot-scope="scope">
-                    <div class="acoes">
-                        <el-button @click="getCarrinho(scope.row)" class="botao">opa</el-button>
-                    </div>
-                </template>
-            </el-table-column>
-        </el-table> -->
+        <div>
+            <v-data-table
+                :headers="headers"
+                :items="users"
+                :items-per-page="50"
+                class="elevation-1"
+                loading
+            >
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+            </template>
+            </v-data-table>
+        </div>
+        
+        <div>
+            {{editedItem.name.first}}
+        </div>
     </div>
-    
 </template>
 
 <script>
@@ -31,15 +32,41 @@ export default {
     data: function() {
         return {
             users: [],
+            headers: [
+                {
+                    text: 'Name (100g serving)',
+                    align: 'start',
+                    sortable: true,
+                    value: 'name.first',
+                },
+                { text: 'Gender', value: 'gender' },
+                { text: 'Birth', value: 'registered.date' },
+                { text: 'Actions', value: 'actions', sortable: false },
+            ],
+            editedIndex: -1,
+            editedItem: {
+                name: 'oi',
+                gender: '',
+                birth: 0
+            },
         }
     },
 
     methods: {
-        async getProductUserCategory() {
+        async getUsers() {
             await axios
-            .get(`${baseApiurl}/`)
+            .get(`${baseApiurl}/users`)
             .then(res => this.users = res.data);
-      },
+        },
+
+        editItem (item) {
+            this.editedIndex = this.users.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+        },
+    },
+
+    mounted() {
+        this.getUsers();
     }
 
 };

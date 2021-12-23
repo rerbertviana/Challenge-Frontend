@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="challenge">
-      <Header/>
-      <Content/>
+    <div class="sistema">
+        <Header/>
+        <Content/>
     </div>
   </div>
 </template>
@@ -15,31 +15,31 @@ import Content from "./components/template/Content.vue"
 
 export default {
   name: 'App',
-  components: { Header, Content }
+  components: { Header, Content}
 }
 </script>
 
-<style>
+<style scoped>
 
   /* * {
     font-family: '';
   } */
 
-  #app {
-    background-color: #E5E5E5;
-  }
-
   body {
     margin:0;
   }
 
-  .challenge {
-    padding: 20px;
+  #app {
     width: 100%;
     height: 100vh;
+    background-color:#E5E5E5;
+  }
+
+  .sistema {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    background-color: #E5E5E5;
   }
 
 </style>
