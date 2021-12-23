@@ -1,11 +1,13 @@
 <template>
     <div>
         <div>
+            <el-input placeholder="Searching" v-model="search" size="large" style="margin-bottom:10px;" suffix-icon="el-icon-search"></el-input>
             <v-data-table
                 :headers="headers"
                 :items="users"
                 :items-per-page="50"
                 class="elevation-1"
+                :search="search"
                 loading
             >
             <template v-slot:[`item.actions`]="{ item }">
@@ -32,6 +34,7 @@ export default {
     data: function() {
         return {
             users: [],
+            search: '',
             headers: [
                 {
                     text: 'Name (100g serving)',
@@ -41,7 +44,11 @@ export default {
                 },
                 { text: 'Gender', value: 'gender' },
                 { text: 'Birth', value: 'registered.date' },
-                { text: 'Actions', value: 'actions', sortable: false },
+                { 
+                    text: 'Actions', 
+                    value: 'actions', sortable: false,
+                    align: 'center',
+                },
             ],
             editedIndex: -1,
             editedItem: {
@@ -73,10 +80,6 @@ export default {
   
 </script>
 
-<style scoped>
-
-    .acoes {
-        display: flex;
-    }
+<style >
 
 </style>
