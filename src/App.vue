@@ -21,26 +21,25 @@ export default {
 
 <style>
 
-/* * {
-  font-family: '';
-} */
+  /* * {
+    font-family: '';
+  } */
 
-#app {
-  background-color: #E5E5E5;
-}
+  #app {
+    background-color: #E5E5E5;
+  }
 
-body {
-  margin:0;
-}
+  body {
+    margin:0;
+  }
 
-.challenge {
-  height: 100vh;
-  display: grid;
-  grid-template-rows: 120px 1fr;
-  grid-template-columns: 1fr;
-  grid-template-areas: 
-    "header"
-    "content"
-}
+  .challenge {
+    padding: 20px;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
 </style>

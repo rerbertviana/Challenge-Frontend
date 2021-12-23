@@ -1,27 +1,27 @@
 <template>
-
     <div class="content">
-        oi
-            <!-- <router-view> </router-view> -->
-
+        <Search/>
     </div>
-    
 </template>
 
 <script>
+import Search from "../content/Search.vue"
+
 export default {
-    name: 'Content'
+    name: 'Content',
+    components: { Search }
 }
 </script>
 
 <style>
    
     .content {
-        margin-left: 20px;
-        margin-right: 20px;
-        margin-bottom: 25px;
-        grid-area: content;
+        padding: 30px;
+        width: 100%;
+        height: 100vh;
         background-color: #F7F9FA;
     }
+
+
 
 </style>
