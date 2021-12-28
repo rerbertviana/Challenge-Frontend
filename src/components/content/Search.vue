@@ -1,7 +1,14 @@
 <template>
   <div>
     <!-- CAMPO SEARCH DA TABELA DE DADOS COM FILTRO POR NOME E NACIONALIDADE !-->
-    <el-input placeholder="Searching" v-model="search" size="large" style="margin-bottom:10px;" suffix-icon="el-icon-search"></el-input>
+    <el-row style="margin-bottom:10px;">
+      <el-col :span="24" style="display:flex; align-items:center;">
+        <el-input placeholder="Searching" v-model="search" size="large" suffix-icon="el-icon-search"></el-input>
+        <el-select v-model="value" filterable placeholder="Gender" clearable no-match-text="Não encontrado" style="margin-left:10px;">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-col>
+    </el-row>
     <!-- TABELA DE DADOS !-->
     <el-table :data="userslist.filter(data => !search || data.name.first.toLowerCase().includes(search.toLowerCase()) || data.nat.toLowerCase().includes(search.toLowerCase()))" border stripe v-loading="loading" element-loading-text="Loading users..." element-loading-spinner="el-icon-loading" empty-text=" ">
       <el-table-column label="NAME">
@@ -16,7 +23,7 @@
         <template slot-scope="scope">
           <div style="display:flex;">
             <v-btn @click="getEditar(scope.row)" style="margin-right: 13px;"><i class="fas fa-edit" style="color: #9EADBA;"></i></v-btn>
-            <v-btn @click="getNada(scope.row)" ><i class="far fa-trash-alt" style="color: #9EADBA;"></i></v-btn>
+            <v-btn @click="open(scope.row)" ><i class="far fa-trash-alt" style="color: #9EADBA;"></i></v-btn>
           </div>
         </template>
       </el-table-column>
@@ -30,7 +37,7 @@
       <!-- AVATAR E ID DO USUARIO !-->
       <el-row style="display:flex; margin-bottom:15px;">
         <el-col :span="24" style="display:flex; align-items:center; flex-direction: column;">
-          <v-avatar size="85" style="margin-bottom: 10px;">
+          <v-avatar size="150" style="margin-bottom: -100px; transform: translateY(-120px); box-shadow: 2px 3px 4px 1px rgba(0, 0, 0, 0.1);">
             <v-img :src= "user.picture.large" />
           </v-avatar>
           <div style="display:flex; box-shadow: 2px 3px 4px 1px rgba(0, 0, 0, 0.1); padding:20px; width:100%; align-items:center;">
@@ -64,7 +71,7 @@
         </el-col>
         <el-col :span="12" style="display: flex; align-items: center;">
           <div style="width: 70px; margin-left:10px;">Birth: </div>
-          <el-input placeholder="Birth" v-model="user.dob.date" clearable></el-input>
+          <el-input v-mask="'##/##/####'" placeholder="xx/xx/xxxx" v-model="user.dob.date" clearable></el-input>
         </el-col>
       </el-row>
       <el-row>
@@ -74,7 +81,7 @@
         </el-col>
         <el-col :span="12" style="display: flex; align-items: center;">
           <div style="width: 70px; margin-left:10px;">Phone: </div>
-          <el-input placeholder="Phone" v-model="user.phone" clearable></el-input>
+          <el-input v-mask="'(##) ####-####'" placeholder="(  ) xxxx-xxxx" v-model="user.phone" clearable></el-input>
         </el-col>
         </el-row>
       <!-- DADOS DE ENDEREÇO !-->
@@ -137,8 +144,19 @@ export default {
             users: [],
             loading: true,
             filtro: 50,
+            value: '',
             search: '',
             dialogVisible: false,
+            options: [ 
+              {
+                value: 'female',
+                label: 'FEMALE'
+              },
+              {
+                value: 'male',
+                label: 'MALE'
+              },
+            ],
             user2: {},
             user: { 
               userId: '',
@@ -207,10 +225,25 @@ export default {
       },
       pageUsers() {
           this.$store.commit('getUsersList', this.pageUsers);
+      },
+      value() {
+        this.redirect()
       }
     },
 
     methods: {
+
+      //REDIRECIONAR FILTRO
+      redirect() {
+        if(this.value == 'male' || this.value == 'female') {
+          console.log(this.value);
+          this.genderFilter();
+        }
+        else {
+          console.log(this.value);
+          this.getUser();
+        }
+      },
 
       //CARREGAR USUARIOS DA API VIA AXIOS
       async getUser() {
@@ -218,6 +251,13 @@ export default {
               .get(`${baseApiurl}/users`)
               .then(res => this.users = res.data);
 
+          // //SCRIPT PARA RETORNAR A DATA FORMATADA
+          // this.users.map( teste => {
+          //   teste.dob.date = (((teste.dob.date).split("-"))[2].split("T"))[0] + "/" + ((teste.dob.date).split("-"))[1] +"/" + ((teste.dob.date).split("-"))[0]
+          // })
+
+          this.value = '';
+          
           this.$store.commit('getUsers', this.users);
           this.$store.commit('getUsersList');
       },
@@ -237,6 +277,15 @@ export default {
         this.$message({
           showClose: true,
           message:'Alterado com sucesso!  ',
+          type: 'success',
+        });
+      },
+
+      //MENSAGEM DE SUCESSO
+      apagado() {
+        this.$message({
+          showClose: true,
+          message:'Excluido com sucesso!  ',
           type: 'success',
         });
       },
@@ -312,12 +361,34 @@ export default {
           //REQUISISÇÃO API VIA AXIOS
           axios.put(`${baseApiurl}/users/${this.user.userId}`, this.user2)
           .then(() => {
-            this.sucesso()
-            this.getUser()
+            this.getUser();
+            this.sucesso();
           })
           this.dialogVisible = false;
         }
-    },
+      },
+
+      //EXCLUIR USUÁRIOS
+      deletar(row) {
+        this.user.userId = row.userId;
+        axios.delete(`${baseApiurl}/users/${this.user.userId}`)
+        .then(() => {
+          this.getUser();
+          this.apagado();
+        })
+      },
+
+      //FILTRAR USUARIOS POR GÊNERO
+      async genderFilter() {
+        await axios.get(`${baseApiurl}/users/gender/${this.value}`)
+        .then((res) => {
+          this.users = res.data;
+          this.sucesso();
+        })
+        //PAGINAÇÃO
+        this.$store.commit('getUsers', this.users);
+        this.$store.commit('getUsersList');
+      },
 
       //CARREGAR PAGINAÇÃO
       getFiltro(){
@@ -386,7 +457,23 @@ export default {
           nat: row.nat,
         }
         this.dialogVisible = true;
-      }
+      },
+
+      //CONTROLLER DELETAR USUARIO
+      open(row) {
+        this.$confirm('Tem certeza que deseja excluir esse usuario?', 'ATENÇÃO!', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'CANCELAR',
+          type: 'warning'
+        }).then(() => {
+          this.deletar(row);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Operação cancelada.'
+          });          
+        });
+      },
     },
 
     mounted() {
@@ -399,16 +486,16 @@ export default {
 <style scoped>
 
   .loading {
-      display:flex; 
-      justify-content:center; 
-      margin-top:20px; 
-      align-items: center;
+    display:flex; 
+    justify-content:center; 
+    margin-top:20px; 
+    align-items: center;
   }
 
   .ico {
-      margin-right: 10px;
-      font-size: 1.5rem;
-      color: #4B5C6B;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    color: #4B5C6B;
   }
 
   .titulos {
