@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- ESTRUTURA DO SISTEMA -->
     <div class="sistema">
         <Header/>
         <Content/>
@@ -20,10 +21,6 @@ export default {
 </script>
 
 <style scoped>
-
-  /* * {
-    font-family: '';
-  } */
 
   body {
     margin:0;

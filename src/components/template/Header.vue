@@ -1,10 +1,12 @@
 <template>
     <div class="header">
+        <!-- CABEÇALHO CINZA !-->
         <div class="header1">
             <div class="bolinha"></div>
             <div class="bolinha"></div>
             <div class="bolinha"></div>
         </div>
+        <!-- CABEÇALHO COM AVATAR USER E DA EMPRESA !-->
         <b-row class="header2">
             <b-col style="display:flex; align-items:center;">
                 <div style="width:40px; height: 40px;"><b-img thumbnail fluid src="https://picsum.photos/250/250/?image=54" alt="Image 1"></b-img></div>
