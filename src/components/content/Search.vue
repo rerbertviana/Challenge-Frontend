@@ -221,10 +221,7 @@ export default {
     watch: {
       //MONITORAR USERS (SAIR DO LOOPING) E CARREGAMENTO DE DADOS DE USUARIO (+ 50)
       users() {
-          this.loading = false;
-      },
-      pageUsers() {
-          this.$store.commit('getUsersList', this.pageUsers);
+        this.loading = false;
       },
       value() {
         this.redirect()
@@ -236,11 +233,9 @@ export default {
       //REDIRECIONAR FILTRO
       redirect() {
         if(this.value == 'male' || this.value == 'female') {
-          console.log(this.value);
           this.genderFilter();
         }
         else {
-          console.log(this.value);
           this.getUser();
         }
       },
@@ -250,11 +245,6 @@ export default {
           await axios
               .get(`${baseApiurl}/users`)
               .then(res => this.users = res.data);
-
-          // //SCRIPT PARA RETORNAR A DATA FORMATADA
-          // this.users.map( teste => {
-          //   teste.dob.date = (((teste.dob.date).split("-"))[2].split("T"))[0] + "/" + ((teste.dob.date).split("-"))[1] +"/" + ((teste.dob.date).split("-"))[0]
-          // })
 
           this.value = '';
           
@@ -277,6 +267,15 @@ export default {
         this.$message({
           showClose: true,
           message:'Alterado com sucesso!  ',
+          type: 'success',
+        });
+      },
+
+      //MENSAGEM DE SUCESSO
+      feito() {
+        this.$message({
+          showClose: true,
+          message:'Feito!  ',
           type: 'success',
         });
       },
@@ -383,7 +382,7 @@ export default {
         await axios.get(`${baseApiurl}/users/gender/${this.value}`)
         .then((res) => {
           this.users = res.data;
-          this.sucesso();
+          this.feito();
         })
         //PAGINAÇÃO
         this.$store.commit('getUsers', this.users);
@@ -392,9 +391,9 @@ export default {
 
       //CARREGAR PAGINAÇÃO
       getFiltro(){
-          this.filtro = this.filtro + 50
-          this.$store.commit('getFiltro', this.filtro);
-          this.$store.commit('getUsersList', this.pageUsers);
+        this.filtro = this.filtro + 50
+        this.$store.commit('getFiltro', this.filtro);
+        this.$store.commit('getUsersList');
       },
 
       //EDITAR - CARREGAR DADOS DA LINHA EM USER

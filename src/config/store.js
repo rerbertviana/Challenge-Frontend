@@ -22,9 +22,13 @@ export default new Vuex.Store({
             state.userslist = [];
 
             for (let i = 0; i < state.filtro; i++) {
-                state.userslist.push(state.storeusers[i])
+                if(state.storeusers[i]) {
+                    state.userslist.push(state.storeusers[i])
+                }
+                else {
+                    break;
+                }
             }
-            
         },
 
         getFiltro(state, filtro){
