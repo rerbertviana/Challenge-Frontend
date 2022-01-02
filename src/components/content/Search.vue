@@ -71,7 +71,7 @@
         </el-col>
         <el-col :span="12" style="display: flex; align-items: center;">
           <div style="width: 70px; margin-left:10px;">Birth: </div>
-          <el-input v-mask="'##/##/####'" placeholder="xx/xx/xxxx" v-model="user.dob.date" clearable></el-input>
+          <el-input v-model="user.dob.date" clearable></el-input>
         </el-col>
       </el-row>
       <el-row>
@@ -357,7 +357,7 @@ export default {
             },
             nat: this.user.nat
           }
-          //REQUISISÇÃO API VIA AXIOS
+          //REQUISIÇÃO API VIA AXIOS
           axios.put(`${baseApiurl}/users/${this.user.userId}`, this.user2)
           .then(() => {
             this.getUser();
