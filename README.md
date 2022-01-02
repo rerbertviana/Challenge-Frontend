@@ -1,24 +1,8 @@
-# challenge
+Fullstack Challenge 2020120
 
-## Project setup
-```
-npm install
-```
+Front-end: desenvolvido para o challenge - Coodesh
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Passos para rodar esse projeto:
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+1. Execute `npm i` para instalar as depedências 
+2. Execute `npm run serve` para colocar o sistema no ar
